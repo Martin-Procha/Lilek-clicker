@@ -5,6 +5,7 @@ let pasivniPrijem = 0;
 let cenaFarmar = 10;
 let cenaZahrada = 50;
 let cenaPlantaze = 1000;
+let cenaZalivani = 10000;
 
 const ulozenaData = JSON.parse(localStorage.getItem("lilekClickerSave"));
 if (ulozenaData) {
@@ -88,6 +89,17 @@ btnPlantaz.addEventListener("click", function() {
     }
 });
 
+btnZalivani.addEventListener("click", function() {
+    if (lilky >= cenaZalivani) {
+        lilky -= cenaZalivani;
+        pasivniPrijem *= 1.2; 
+        cenaZalivani = Math.round(cenaPlantaze + 10000);
+        aktualizujUI();
+        ulozHru();
+    } else {
+        alert("Nedostatek prostředků na Zalivaní!");
+    }
+});
 
 
 setInterval(function() {
