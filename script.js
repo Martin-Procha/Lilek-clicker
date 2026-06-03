@@ -1,6 +1,7 @@
 let lilky = 0;
 let silaKliknuti = 1;
 let pasivniPrijem = 0;
+let KliknutiMult = 1;
 
 // Výchozí ceny budov
 let cenaFarmar = 10;
@@ -92,7 +93,7 @@ function aktualizujUI() {
 
 // Hlavní klikací tlačítko
 btnLilek.addEventListener("click", function() {
-    lilky += silaKliknuti;
+    lilky += silaKliknuti*KliknutiMult;
     aktualizujUI();
     ulozHru();
 });
@@ -174,7 +175,7 @@ btnMonopol.addEventListener("click", function() {
 btnZalivani.addEventListener("click", function() {
     if (lilky >= cenaZalivani) {
         lilky -= cenaZalivani;
-        silaKliknuti = silaKliknuti * 1.2; // Násobí tvou sílu kliku 1.2x
+        KliknutiMult = KliknutiMult * 1.2; // Násobí tvou sílu kliku 1.2x
         cenaZalivani = Math.round(cenaZalivani * 1.5);
         aktualizujUI();
         ulozHru();
