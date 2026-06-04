@@ -116,7 +116,7 @@ btnFarmar.addEventListener("click", function() {
         aktualizujUI();
         ulozHru();
     } else {
-        //alert("Nedostatek prostředků na farmáře!");
+        alert("Nedostatek prostředků na farmáře!");
     }
 });
 
