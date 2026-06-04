@@ -2,6 +2,7 @@ let lilky = 0;
 let silaKliknuti = 1;
 let pasivniPrijem = 0;
 let KliknutiMult = 1;
+let PasivniMult = 1;
 
 // Výchozí ceny budov
 let cenaFarmar = 10;
@@ -22,6 +23,8 @@ if (ulozenaData) {
     lilky = ulozenaData.lilky || 0;
     silaKliknuti = ulozenaData.silaKliknuti || 1;
     pasivniPrijem = ulozenaData.pasivniPrijem || 0;
+    KliknutiMult = ulozenaData.KliknutiMult || 1;
+    PasivniMult = ulozenaData.PasivniMult || 1;
     
     cenaFarmar = ulozenaData.cenaFarmar || 10;
     cenaZahrada = ulozenaData.cenaZahrada || 50;
@@ -38,7 +41,9 @@ if (ulozenaData) {
 // Propojení HTML elementů s JS
 const textSkore = document.getElementById("skore");
 const textPasivniPrijem = document.getElementById("pasivni-prijem-text");
+const textPasivniPrijemMult = document.getElementById("pasivni-prijem-text-mult");
 const textKlik = document.getElementById("klik-text");
+const textKlikMult = document.getElementById("klik-text-mult");
 
 const btnLilek = document.getElementById("btn-lilek");
 const btnFarmar = document.getElementById("btn-farmar");
@@ -67,7 +72,9 @@ function ulozHru() {
         cenaMonopol: cenaMonopol,
         cenaZalivani: cenaZalivani,
         cenaMotyky: cenaMotyky,
-        cenaHnojivo: cenaHnojivo
+        cenaHnojivo: cenaHnojivo,
+        KliknutiMult: KliknutiMult,
+        PasivniMult: PasivniMult
     };
     localStorage.setItem("lilekClickerSave", JSON.stringify(dataProUlozeni));
 }
@@ -76,8 +83,10 @@ function ulozHru() {
 function aktualizujUI() {
     // Math.floor a Math.round řeší zaokrouhlení, aby se nezobrazovala dlouhá desetinná čísla
     textSkore.textContent = Math.floor(lilky);
-    textPasivniPrijem.textContent = Math.round(pasivniPrijem * 10) / 10;
-    textKlik.textContent = Math.round(silaKliknuti * 10) / 10;
+    textPasivniPrijem.textContent = Math.round(pasivniPrijem);
+    textPasivniPrijemMult.textContent = Math.round(PasivniMult * 10) / 10;
+    textKlik.textContent = Math.round(silaKliknuti);
+    textKlikMult.textContent = Math.round(KliknutiMult * 10) / 10;
     
     btnFarmar.textContent = `🧑🏿‍🌾 Najmout Farmáře (Cena: ${cenaFarmar} lilků)`;
     btnZahrada.textContent = `🌲 Koupit Zahradu (Cena: ${cenaZahrada} lilků)`;
@@ -93,7 +102,7 @@ function aktualizujUI() {
 
 // Hlavní klikací tlačítko
 btnLilek.addEventListener("click", function() {
-    lilky += silaKliknuti*KliknutiMult;
+    lilky = lilky+(silaKliknuti*KliknutiMult);
     aktualizujUI();
     ulozHru();
 });
@@ -107,7 +116,7 @@ btnFarmar.addEventListener("click", function() {
         aktualizujUI();
         ulozHru();
     } else {
-        alert("Nedostatek prostředků na farmáře!");
+        //alert("Nedostatek prostředků na farmáře!");
     }
 });
 
@@ -199,7 +208,7 @@ btnMotyky.addEventListener("click", function() {
 btnHnojivo.addEventListener("click", function() {
     if (lilky >= cenaHnojivo) {
         lilky -= cenaHnojivo;
-        pasivniPrijem = pasivniPrijem * 1.15; // Zvýší veškerý pasivní příjem o 15 %
+        PasivniMult = PasivniMult * 1.15; // Zvýší veškerý pasivní příjem o 15 %
         cenaHnojivo = Math.round(cenaHnojivo * 1.6);
         aktualizujUI();
         ulozHru();
@@ -214,7 +223,9 @@ btnReset.addEventListener("click", function() {
         localStorage.removeItem("lilekClickerSave");
         lilky = 0;
         silaKliknuti = 1;
+        KliknutiMult = 1;
         pasivniPrijem = 0;
+        PasivniMult = 1;
         cenaFarmar = 10;
         cenaZahrada = 50;
         cenaPlantaze = 1000;
@@ -231,7 +242,7 @@ btnReset.addEventListener("click", function() {
 // Interval běžící na pozadí (každou sekundu přičte pasivní příjem)
 setInterval(function() {
     if (pasivniPrijem > 0) {
-        lilky += pasivniPrijem;
+        lilky = lilky+(pasivniPrijem*PasivniMult);
         aktualizujUI();
         ulozHru();
     }
